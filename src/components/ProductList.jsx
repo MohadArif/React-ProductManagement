@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "./Header";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-function Table() {
+function ProductList() {
   const navigate = useNavigate();
   const Base_Url = "http://localhost:8080/product";
   const [product, setProduct] = useState([]);
@@ -25,14 +25,24 @@ function Table() {
     console.log("delete method entered");
     const deleteApi = async () => {
       try {
-        const response = await axios.delete(`${Base_Url}/delete/${id}`);
-        console.log("data deleted succesfully :", response.data);
-        // Update UI by removing deleted product from the list
-        setProduct((prevProducts) =>
-          prevProducts.filter((item) => item.id !== id)
-        );
+        const token = sessionStorage.getItem("jwtToken");
+        console.log(token);
+        const response = await axios.delete(`${Base_Url}/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status == 200) {
+          console.log("data deleted succesfully :", response.data);
+          toast.success("product deleted..");
+          // Update UI by removing deleted product from the list
+          setProduct((prevProducts) =>
+            prevProducts.filter((item) => item.id !== id)
+          );
+        }
       } catch (error) {
         console.error(error.message);
+        toast.error("something wrong..");
       }
     };
     deleteApi();
@@ -86,4 +96,4 @@ function Table() {
   );
 }
 
-export default Table;
+export default ProductList;

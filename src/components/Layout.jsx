@@ -1,19 +1,12 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import Header from "./Header";
+import { Outlet } from "react-router-dom";
+import Nav from "./Nav";
 
 function Layout() {
   return (
     <div>
       <div className="mb-5">
-        <Header>
-          <li>
-            <Link to="/Table">Home</Link>
-          </li>
-          <li>
-            <Link to="/CreateProduct">Add-Product</Link>
-          </li>
-        </Header>
+        <Nav />
       </div>
       <Outlet />
     </div>
